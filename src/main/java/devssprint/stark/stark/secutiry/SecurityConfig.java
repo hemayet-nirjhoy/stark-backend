@@ -2,6 +2,7 @@ package devssprint.stark.stark.secutiry;
 
 import org.hibernate.annotations.ConcreteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,12 +24,13 @@ public class SecurityConfig{
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/account/signing").permitAll()
+                        .requestMatchers("/account/login").permitAll()
                         .requestMatchers("/account/forget-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/imgs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/documents/**").permitAll()
